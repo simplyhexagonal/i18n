@@ -1,5 +1,9 @@
 import fs from 'fs';
-import i18next, {i18n, InitOptions, TFunction} from 'i18next';
+import i18next, {
+  i18n,
+  InitOptions,
+  TFunction
+} from 'i18next';
 import {
   MultiReplaceMatcher,
   MultiReplaceSyncPatterns,
