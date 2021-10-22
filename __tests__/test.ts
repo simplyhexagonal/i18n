@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { multiReplaceSync } from '@simplyhexagonal/multi-replace';
 
 import I18N from '../src';
 
@@ -64,6 +65,24 @@ describe('I18N internationalization class', () => {
     const result = i18n.apply(template);
 
     expect(result).toBe(esResult);
+  });
+
+  it('can fallback if language missing', async () => {
+    await i18n.initPromise;
+
+    await i18n.changeLanguage('fr');
+
+    const result = i18n.apply(template);
+
+    expect(result).toBe(
+      multiReplaceSync(
+        template,
+        [
+          [/\{\{([^\{\}]+?)\}\}/g, '$1'],
+          [/__\(\s*['"`](.+?)['"`]\s*\)/g, '$1'],
+        ],
+      ),
+    );
   });
 
   it('can be used as an esbuild plugin', async () => {

@@ -9,6 +9,7 @@ import {
   MultiReplaceSyncPatterns,
   multiReplaceSync,
 } from '@simplyhexagonal/multi-replace';
+import MonoContext from '@simplyhexagonal/mono-context';
 
 // @ts-ignore
 import { version } from '../package.json';
@@ -17,11 +18,17 @@ export default class I18N {
   static version = version;
 
   private static instance: I18N;
+  private _logfn: (
+    (...args: any[]) => void
+  ) | (
+    (...args: any[]) => Promise<void>
+  ) = (...args) => console.log('\n\t🟡 ', ...args, '\n');
 
   private static stringifyAndAlert = (value: any) => {
-    console.log(`
-    🟡 Missing translation for: ${value}
-    `);
+    const {language} = I18N.instance.i18next;
+
+    I18N.instance._logfn(`I18N WARNING: Missing "${language}" translation for: ${value}`);
+
     return JSON.stringify(value);
   };
 
@@ -45,9 +52,9 @@ export default class I18N {
     match: string,
     p0: string,
   ) => {
-    console.log(`
-    🟡 I18N WARNING: replacer called but is not ready! Did you forget to await initPromise?
-    `);
+    I18N.instance._logfn(
+      'I18N WARNING: replacer called but is not ready! Did you forget to await initPromise?'
+    );
 
     return p0;
   };
@@ -99,10 +106,9 @@ export default class I18N {
   };
 
   constructor(options: InitOptions, matchers?: MultiReplaceMatcher[]) {
-    if (I18N.instance) {
-      console.log(`
-      🟡 I18N WARNING: already initialized! Returning existing instance...
-      `);
+    const callCount = MonoContext.count('I18N');
+    if (callCount > 1) {
+      I18N.instance._logfn('I18N WARNING: already initialized! Returning existing instance...');
 
       return I18N.instance;
     }
@@ -111,19 +117,29 @@ export default class I18N {
       type: 'postProcessor',
       name: 'warnMissingTranslation',
       process: (value: any, key: any, options: any, translator: any) => {
-        if (value === key) {
+        if ([value].flat().join('') === [key].flat().join('')) {
           I18N.stringifyAndAlert(value);
         }
 
         return value;
       }
-    }).init(options).then((t) => {
+    }).init({
+      ...options,
+      postProcess: [
+        'warnMissingTranslation',
+        ...(options.postProcess || []),
+      ],
+    }).then((t) => {
       this.t = t;
 
       this.replacer = this._generateReplacer(t);
 
       return t;
     });
+
+    if (typeof (MonoContext.getStateValue('logger') || {}).warn === 'function') {
+      this._logfn = MonoContext.getStateValue('logger').warn;
+    }
 
     if (matchers) {
       this.matchers = matchers;
