@@ -4,7 +4,10 @@
   "description": "Internationalization (i18n) function compatible with esbuild for use as plugin or stand-alone",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "dev": "scripty",
+    "test": "scripty",
+    "build": "scripty",
+    "release": "release-it"
   },
   "contributors": [
     {
