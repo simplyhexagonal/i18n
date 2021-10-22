@@ -115,7 +115,7 @@ var I18N = (() => {
         return t;
       });
       if (typeof (import_mono_context.default.getStateValue("logger") || {}).warn === "function") {
-        this._logfn = import_mono_context.default.getStateValue("logger").warn;
+        this._logfn = (...args) => import_mono_context.default.getStateValue("logger").warn(...args);
       }
       if (matchers) {
         this.matchers = matchers;
