@@ -29,6 +29,7 @@ var I18N = (() => {
   var import_fs = __toModule(require("fs"));
   var import_i18next = __toModule(require("i18next"));
   var import_multi_replace = __toModule(require("@simplyhexagonal/multi-replace"));
+  var import_package = __toModule(require("../package.json"));
   const _I18N = class {
     constructor(options, matchers) {
       this._generateReplacer = (t) => {
@@ -99,6 +100,7 @@ var I18N = (() => {
     }
   };
   let I18N = _I18N;
+  I18N.version = import_package.version;
   I18N.stringifyAndAlert = (value) => {
     console.log(`
     \u{1F7E1} Missing translation for: ${value}

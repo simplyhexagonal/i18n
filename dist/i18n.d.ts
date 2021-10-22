@@ -1,6 +1,7 @@
 import { i18n, InitOptions, TFunction } from 'i18next';
 import { MultiReplaceMatcher } from '@simplyhexagonal/multi-replace';
 export default class I18N {
+    static version: string;
     private static instance;
     private static stringifyAndAlert;
     private _generateReplacer;
