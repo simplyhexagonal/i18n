@@ -1,8 +1,8 @@
 # Simply Hexagonal i18n
 ![Tests](https://github.com/simplyhexagonal/i18n/workflows/tests/badge.svg)
 
-[i18next](https://www.npmjs.com/package/i18next) wrapper, compatible with esbuild for use as plugin
-or stand-alone dependency.
+[i18next](https://www.npmjs.com/package/i18next) wrapper for use as an esbuild / ViteJS plugin
+or as a stand-alone dependency.
 
 ## Open source notice
 
@@ -53,8 +53,6 @@ const i18n = new I18N({
 With [esbuild](https://esbuild.github.io/):
 
 ```ts
-await i18n.initPromise;
-
 await i18n.changeLanguage('en');
 
 const esbuildConfig: BuildOptions = {
@@ -63,7 +61,7 @@ const esbuildConfig: BuildOptions = {
   bundle: true,
   minify: isProduction,
   plugins: [
-    i18n.plugin,
+    i18n.plugins.esbuild,
   ],
 };
 
@@ -73,21 +71,14 @@ build(esbuildConfig);
 With [Vite](https://vitejs.dev/):
 
 ```ts
-await i18n.initPromise;
-
 await i18n.changeLanguage('en');
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [reactRefresh()],
-  optimizeDeps: {
-    esbuildOptions: {
-      plugins: [
-        i18n.plugin,
-      ],
-    },
-  },
-})
+  plugins: [
+    i18n.plugins.vite,
+  ],
+});
 ```
 
 Stand-alone:

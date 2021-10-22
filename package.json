@@ -1,7 +1,7 @@
 {
   "name": "@simplyhexagonal/i18n",
   "version": "1.0.2",
-  "description": "Internationalization (i18n) function compatible with esbuild for use as plugin or stand-alone",
+  "description": "i18next wrapper for use as an esbuild / ViteJS plugin or as a stand-alone dependency",
   "main": "dist/i18n.js",
   "types": "dist/i18n.d.ts",
   "scripts": {
