@@ -1,13 +1,35 @@
 {
   "name": "@simplyhexagonal/i18n",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "Internationalization (i18n) function compatible with esbuild for use as plugin or stand-alone",
   "main": "index.js",
   "scripts": {
     "test": "jest"
   },
-  "author": "Jean M. Lescure",
+  "contributors": [
+    {
+      "name": "Jean M. Lescure",
+      "email": "opensource@jeanlescure.io",
+      "url": "http://jeanlescure.io/"
+    }
+  ],
   "license": "Apache-2.0",
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
+  "release-it": {
+    "git": {
+      "changelog": "auto-changelog --stdout -l false -u -t ./assets/changelog-compact.hbs"
+    },
+    "hooks": {
+      "after:bump": "scripty"
+    },
+    "npm": {
+      "publish": false
+    }
+  },
   "dependencies": {
     "@simplyhexagonal/multi-replace": "^1.0.4",
     "i18next": "^21.0.1"
@@ -19,7 +41,7 @@
     "esbuild": "^0.12.28",
     "jest": "^27.2.0",
     "refup": "^1.0.0",
-    "release-it": "^14.11.5",
+    "release-it": "^14.11.6",
     "scripty": "^2.0.0",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",

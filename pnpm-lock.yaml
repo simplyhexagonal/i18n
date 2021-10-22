@@ -9,7 +9,7 @@ specifiers:
   i18next: ^21.0.1
   jest: ^27.2.0
   refup: ^1.0.0
-  release-it: ^14.11.5
+  release-it: ^14.11.6
   scripty: ^2.0.0
   ts-jest: ^27.0.5
   ts-node: ^10.2.1
