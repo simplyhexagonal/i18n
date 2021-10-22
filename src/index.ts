@@ -10,7 +10,12 @@ import {
   multiReplaceSync,
 } from '@simplyhexagonal/multi-replace';
 
+// @ts-ignore
+import { version } from '../package.json';
+
 export default class I18N {
+  static version = version;
+
   private static instance: I18N;
 
   private static stringifyAndAlert = (value: any) => {
