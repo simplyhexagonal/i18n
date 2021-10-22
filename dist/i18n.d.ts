@@ -3,6 +3,7 @@ import { MultiReplaceMatcher } from '@simplyhexagonal/multi-replace';
 export default class I18N {
     static version: string;
     private static instance;
+    private _logfn;
     private static stringifyAndAlert;
     private _generateReplacer;
     initPromise: Promise<TFunction>;

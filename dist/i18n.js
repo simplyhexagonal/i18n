@@ -29,9 +29,11 @@ var I18N = (() => {
   var import_fs = __toModule(require("fs"));
   var import_i18next = __toModule(require("i18next"));
   var import_multi_replace = __toModule(require("@simplyhexagonal/multi-replace"));
+  var import_mono_context = __toModule(require("@simplyhexagonal/mono-context"));
   var import_package = __toModule(require("../package.json"));
   const _I18N = class {
     constructor(options, matchers) {
+      this._logfn = (...args) => console.log("\n	\u{1F7E1} ", ...args, "\n");
       this._generateReplacer = (t) => {
         return (match, p0) => {
           return t(p0);
@@ -40,9 +42,7 @@ var I18N = (() => {
       this.t = null;
       this.matchers = [/__\(\s*['"`](.+?)['"`]\s*\)/g];
       this.replacer = (match, p0) => {
-        console.log(`
-    \u{1F7E1} I18N WARNING: replacer called but is not ready! Did you forget to await initPromise?
-    `);
+        _I18N.instance._logfn("I18N WARNING: replacer called but is not ready! Did you forget to await initPromise?");
         return p0;
       };
       this.i18next = import_i18next.default;
@@ -89,26 +89,34 @@ var I18N = (() => {
         const replacePatterns = this.matchers.map((m) => [m, this.replacer]);
         return (0, import_multi_replace.multiReplaceSync)(originalContents, replacePatterns);
       };
-      if (_I18N.instance) {
-        console.log(`
-      \u{1F7E1} I18N WARNING: already initialized! Returning existing instance...
-      `);
+      const callCount = import_mono_context.default.count("I18N");
+      if (callCount > 1) {
+        _I18N.instance._logfn("I18N WARNING: already initialized! Returning existing instance...");
         return _I18N.instance;
       }
       this.initPromise = import_i18next.default.use({
         type: "postProcessor",
         name: "warnMissingTranslation",
         process: (value, key, options2, translator) => {
-          if (value === key) {
+          if ([value].flat().join("") === [key].flat().join("")) {
             _I18N.stringifyAndAlert(value);
           }
           return value;
         }
-      }).init(options).then((t) => {
+      }).init({
+        ...options,
+        postProcess: [
+          "warnMissingTranslation",
+          ...options.postProcess || []
+        ]
+      }).then((t) => {
         this.t = t;
         this.replacer = this._generateReplacer(t);
         return t;
       });
+      if (typeof (import_mono_context.default.getStateValue("logger") || {}).warn === "function") {
+        this._logfn = import_mono_context.default.getStateValue("logger").warn;
+      }
       if (matchers) {
         this.matchers = matchers;
       }
@@ -118,9 +126,8 @@ var I18N = (() => {
   let I18N = _I18N;
   I18N.version = import_package.version;
   I18N.stringifyAndAlert = (value) => {
-    console.log(`
-    \u{1F7E1} Missing translation for: ${value}
-    `);
+    const { language } = _I18N.instance.i18next;
+    _I18N.instance._logfn(`I18N WARNING: Missing "${language}" translation for: ${value}`);
     return JSON.stringify(value);
   };
   return src_exports;
