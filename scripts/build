@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 rm -rf dist/*
-esbuild src/index.ts --bundle --external:axios --target=chrome60,firefox60,safari12,edge18 \
+esbuild src/index.ts --platform=node \
   --outfile=dist/i18n.js --sourcemap --format=iife --global-name=I18N \
-  && esbuild src/index.ts --bundle --external:axios --target=chrome60,firefox60,safari12,edge18 \
+  && esbuild src/index.ts --platform=node \
   --outfile=dist/i18n.min.js --minify --format=iife --global-name=I18N \
   && tsc -d --emitDeclarationOnly --rootDir src --outDir dist \
   && mv dist/index.d.ts dist/i18n.d.ts \
