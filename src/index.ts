@@ -138,7 +138,7 @@ export default class I18N {
     });
 
     if (typeof (MonoContext.getStateValue('logger') || {}).warn === 'function') {
-      this._logfn = MonoContext.getStateValue('logger').warn;
+      this._logfn = (...args) => MonoContext.getStateValue('logger').warn(...args);
     }
 
     if (matchers) {
