@@ -11,9 +11,19 @@ export default class I18N {
     replacer: (match: string, p0: string) => string;
     i18next: i18n;
     changeLanguage: i18n['changeLanguage'];
-    plugin: {
-        name: string;
-        setup(build: any): void;
+    plugins: {
+        esbuild: {
+            name: string;
+            setup(build: any): void;
+        };
+        vite: {
+            name: string;
+            transform: (code: string) => Promise<{
+                code: string;
+                map: null;
+            }>;
+            transformIndexHtml: (html: string) => Promise<string>;
+        };
     };
     constructor(options: InitOptions, matchers?: MultiReplaceMatcher[]);
     apply: (originalContents: string) => string;

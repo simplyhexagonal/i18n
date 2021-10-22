@@ -47,26 +47,42 @@ var I18N = (() => {
       };
       this.i18next = import_i18next.default;
       this.changeLanguage = import_i18next.default.changeLanguage.bind(import_i18next.default);
-      this.plugin = {
-        name: "i18n",
-        setup(build) {
-          const loadPatterns = [
-            [/\.tsx$/, "tsx"],
-            [/\.ts$/, "ts"],
-            [/\.jsx$/, "jsx"],
-            [/\.js$/, "js"]
-          ];
-          loadPatterns.forEach(([filter, loader]) => {
-            build.onLoad({ filter }, async (args) => {
-              await _I18N.instance.initPromise;
-              const originalContents = import_fs.default.readFileSync(args.path, "utf8");
-              const contents = _I18N.instance.apply(originalContents);
-              return {
-                contents,
-                loader
-              };
+      this.plugins = {
+        esbuild: {
+          name: "i18n",
+          setup(build) {
+            const loadPatterns = [
+              [/\.tsx$/, "tsx"],
+              [/\.ts$/, "ts"],
+              [/\.jsx$/, "jsx"],
+              [/\.js$/, "js"]
+            ];
+            loadPatterns.forEach(([filter, loader]) => {
+              build.onLoad({ filter }, async (args) => {
+                await _I18N.instance.initPromise;
+                const originalContents = import_fs.default.readFileSync(args.path, "utf8");
+                const contents = _I18N.instance.apply(originalContents);
+                return {
+                  contents,
+                  loader
+                };
+              });
             });
-          });
+          }
+        },
+        vite: {
+          name: "i18n",
+          transform: async (code) => {
+            await _I18N.instance.initPromise;
+            return {
+              code: _I18N.instance.apply(code),
+              map: null
+            };
+          },
+          transformIndexHtml: async (html) => {
+            await _I18N.instance.initPromise;
+            return _I18N.instance.apply(html);
+          }
         }
       };
       this.apply = (originalContents) => {
