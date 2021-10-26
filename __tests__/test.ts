@@ -1,10 +1,17 @@
 import fs from 'fs';
+import MonoContext from '@simplyhexagonal/mono-context';
 import { multiReplaceSync } from '@simplyhexagonal/multi-replace';
 
 import I18N from '../src';
 
 import en from '../__fixtures__/en.json';
 import es from '../__fixtures__/es.json';
+
+MonoContext.setState({
+  logger: {
+    warn: (...args: any[]) => console.log('👀', ...args),
+  }
+});
 
 class esbuildMock {
   static loadRules = [] as {filter: RegExp; fn: (args: any) => Promise<({contents: string; loader: string;})>}[];

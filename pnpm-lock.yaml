@@ -19,11 +19,11 @@ specifiers:
   typescript: ^4.4.3
 
 dependencies:
-  '@simplyhexagonal/mono-context': 1.1.0
-  '@simplyhexagonal/multi-replace': 1.0.4
   i18next: 21.0.1
 
 devDependencies:
+  '@simplyhexagonal/mono-context': 1.1.0
+  '@simplyhexagonal/multi-replace': 1.0.4
   '@types/jest': 27.0.2
   '@types/node': 16.9.2
   auto-changelog: 2.3.0
@@ -733,11 +733,11 @@ packages:
 
   /@simplyhexagonal/mono-context/1.1.0:
     resolution: {integrity: sha512-O01NgVJpC7Io0Tb3v10U56NZvOF0WxKKnWefx6xyed3uAVhn/CmugJCiwOP6B+vuTvTCjOWWFeELg1Pbs2WJDw==}
-    dev: false
+    dev: true
 
   /@simplyhexagonal/multi-replace/1.0.4:
     resolution: {integrity: sha512-5HL6lYfRYJ211QwdAaIr2DSpPjMK3Gy9BpMPVjNHQL34hosg9sNZNadut85+S6ozlbYSt6jKfbN64EfAd+ZVIQ==}
-    dev: false
+    dev: true
 
   /@sindresorhus/is/0.14.0:
     resolution: {integrity: sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==}
