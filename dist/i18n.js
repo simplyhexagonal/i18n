@@ -6,6 +6,13 @@ var I18N = (() => {
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
   var __markAsModule = (target) => __defProp(target, "__esModule", { value: true });
+  var __require = /* @__PURE__ */ ((x) => typeof require !== "undefined" ? require : typeof Proxy !== "undefined" ? new Proxy(x, {
+    get: (a, b) => (typeof require !== "undefined" ? require : a)[b]
+  }) : x)(function(x) {
+    if (typeof require !== "undefined")
+      return require.apply(this, arguments);
+    throw new Error('Dynamic require of "' + x + '" is not supported');
+  });
   var __export = (target, all) => {
     __markAsModule(target);
     for (var name in all)
@@ -22,16 +29,22 @@ var I18N = (() => {
   var __toModule = (module) => {
     return __reExport(__markAsModule(__defProp(module != null ? __create(__getProtoOf(module)) : {}, "default", module && module.__esModule && "default" in module ? { get: () => module.default, enumerable: true } : { value: module, enumerable: true })), module);
   };
+
+  // src/index.ts
   var src_exports = {};
   __export(src_exports, {
     default: () => I18N
   });
-  var import_fs = __toModule(require("fs"));
-  var import_i18next = __toModule(require("i18next"));
-  var import_multi_replace = __toModule(require("@simplyhexagonal/multi-replace"));
-  var import_mono_context = __toModule(require("@simplyhexagonal/mono-context"));
-  var import_package = __toModule(require("../package.json"));
-  const _I18N = class {
+  var import_fs = __toModule(__require("fs"));
+  var import_i18next = __toModule(__require("i18next"));
+  var import_multi_replace = __toModule(__require("@simplyhexagonal/multi-replace"));
+  var import_mono_context = __toModule(__require("@simplyhexagonal/mono-context"));
+
+  // package.json
+  var version = "1.2.2";
+
+  // src/index.ts
+  var _I18N = class {
     constructor(options, matchers) {
       this._logfn = (...args) => console.log("\n	\u{1F7E1} ", ...args, "\n");
       this._generateReplacer = (t) => {
@@ -123,8 +136,8 @@ var I18N = (() => {
       _I18N.instance = this;
     }
   };
-  let I18N = _I18N;
-  I18N.version = import_package.version;
+  var I18N = _I18N;
+  I18N.version = version;
   I18N.stringifyAndAlert = (value) => {
     const { language } = _I18N.instance.i18next;
     _I18N.instance._logfn(`I18N WARNING: Missing "${language}" translation for: ${value}`);
