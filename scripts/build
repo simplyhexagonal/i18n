@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
 rm -rf dist/*
-esbuild src/index.ts --platform=node \
+esbuild src/index.ts --bundle \
+  --external:i18next --external:\@simplyhexagonal/multi-replace --external:\@simplyhexagonal/mono-context \
+  --platform=node \
   --outfile=dist/i18n.js --sourcemap --format=iife --global-name=I18N \
-  && esbuild src/index.ts --platform=node \
+  && esbuild src/index.ts --bundle \
+  --external:i18next --external:\@simplyhexagonal/multi-replace --external:\@simplyhexagonal/mono-context \
+  --platform=node \
   --outfile=dist/i18n.min.js --minify --format=iife --global-name=I18N \
   && tsc -d --emitDeclarationOnly --rootDir src --outDir dist \
   && mv dist/index.d.ts dist/i18n.d.ts \
